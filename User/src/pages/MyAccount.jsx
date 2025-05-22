@@ -5,6 +5,9 @@ import AddressForm from "../components/AddressForm";
 const MyAccount = () => {
   const userDate = useSelector((state) => state.auth.userData);
 
+  console.log(userDate);
+  
+  const profileImage = userDate?.avatar || "https://www.kindpng.com/picc/m/722-7221920_placeholder-profile-image-placeholder-png-transparent-png.png"
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 p-10">
       <div className="  p-6 bg-white shadow-md rounded-md ">
@@ -13,7 +16,7 @@ const MyAccount = () => {
           {/* Profile Image */}
           <div className="w-24 h-24 border-2 border-blue-600 rounded-full flex-shrink-0 overflow-hidden">
             <img
-              src="https://www.kindpng.com/picc/m/722-7221920_placeholder-profile-image-placeholder-png-transparent-png.png"
+              src={profileImage}
               alt=""
             />
           </div>
@@ -23,7 +26,7 @@ const MyAccount = () => {
             <div className="mb-4">
               <label className="text-sm font-semibold">User Id</label>
               <input
-                value={userDate?._id}
+                value={userDate?._id || ""}
                 disabled
                 type="text"
                 placeholder="Enter your phone number"
@@ -36,7 +39,7 @@ const MyAccount = () => {
               <label className="text-sm font-semibold">Name</label>
               <input
                 type="text"
-                value={userDate?.name}
+                value={userDate?.name || ""}
                 disabled
                 placeholder="Enter Your Name"
                 className="w-full p-2 border rounded bg-gray-100"
@@ -47,7 +50,7 @@ const MyAccount = () => {
             <div className="mb-4">
               <label className="text-sm font-semibold">Email</label>
               <input
-                value={userDate?.email}
+                value={userDate?.email || ""}
                 disabled
                 type="email"
                 placeholder="Enter Your Email"

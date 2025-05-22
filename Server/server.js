@@ -11,17 +11,38 @@ import bannerRouter from './routes/bannerRoute.js'
 import paymentRouter from './routes/paymentRoute.js';
 import reviewRouter from './routes/reviewRoute.js'
 
+import './helpers/passport.js'
+import passport from 'passport';
+import session from 'express-session';
+
 import dotenv from 'dotenv';
+import { connectDB } from './helpers/db.js';
 dotenv.config();
 
 
-mongoose.connect(process.env.MONGODB_URL).then(() => console.log("mongoDB connected...")).catch((error) => console.log(error))
+connectDB();
 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = process.env.CLIENT_URL.split(',');
+
+// session must come after cors
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true if using https
+      httpOnly: true,
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(
     cors({
@@ -44,6 +65,19 @@ app.use(
 
 app.use(cookieParser())
 app.use(express.json())
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
+    const { token } = req.user; // token was passed from passport.use
+    res.redirect(`http://localhost:5173/auth/login/success?token=${token}`);
+  }
+);
 
 app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)

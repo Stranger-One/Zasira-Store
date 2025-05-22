@@ -1,4 +1,4 @@
-# 🛒 E-Commerce App
+# 🛒 Zasira Store (E-Commerce App)
 
 A fully functional E-Commerce Application built using MERN (MongoDB, Express.js, React, Node.js) stack. This project provides a seamless shopping experience with modern UI, secure authentication, product management, and payment integration.
 
@@ -23,7 +23,7 @@ A fully functional E-Commerce Application built using MERN (MongoDB, Express.js,
 Clone the repository:
 
 ```bash
-git clone https://github.com/RAHULNAIK4117/E_Commerce_app
+git clone https://github.com/Stranger-One/Zasira-Store
 ```
 
 Navigate to the project directory and install dependencies:

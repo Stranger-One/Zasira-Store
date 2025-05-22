@@ -44,6 +44,11 @@ const SignIn = () => {
 
     setLoading(false)
   }
+    const handleGoogleLogin = () => {
+    // console.log("Google Login clicked");
+    window.open('http://localhost:5000/auth/google', '_self');
+
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -99,7 +104,7 @@ const SignIn = () => {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        <button className="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
+        <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
           <FcGoogle className="mr-2" size={22} />
           Sign in with Google
         </button>
