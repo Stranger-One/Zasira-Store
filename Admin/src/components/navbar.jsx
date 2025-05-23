@@ -2,7 +2,7 @@ import React from 'react';
 
 const Navbar = ({ setToken }) => {
   return (
-    <div className='flex items-center py-2 px-[4%] justify-between sticky top-0 bg-white shadow z-10'>
+    <div className='flex items-center py-2 px-[4%] justify-between sticky top-0 w-full bg-white shadow z-10'>
         <img src="/20240604_155758.png" alt="Admin Logo" className='w-24' />
         <button 
             onClick={() => setToken('')} 

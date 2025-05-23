@@ -6,7 +6,7 @@ import ProductForm from "../components/ProductForm";
 
 const Add = ({ token }) => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="">
       <ProductForm formTitle={"Add Product"} />
     </div>
   );

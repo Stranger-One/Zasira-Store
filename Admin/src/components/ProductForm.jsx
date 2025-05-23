@@ -15,15 +15,74 @@ const categories = [
   "groceries",
 ];
 const subCategories = {
-  footwear: ["Men", "Women", "Kids", "Sports", "Casual", "Formal", "Boots", "Sandals", "Sneakers"],
-  electronics: ["Laptops", "Cameras", "Mobiles", "Headphones", "Speakers", "Tablets", "Monitors", "Smartwatches"],
-  fashion: ["Men", "Women", "Kids", "Ethnic Wear", "Western Wear", "Sportswear", "Winter Wear", "Footwear", "Accessories"],
-  accessories: ["Smart Watch Accessories", "Phone Cases", "Bags", "Wallets", "Belts", "Jewelry", "Sunglasses", "Hats"],
-  appliances: ["Refrigerators", "Washing Machines", "Microwaves", "Air Conditioners", "Vacuum Cleaners", "Water Purifiers", "Heaters", "Fans"],
+  footwear: [
+    "Men",
+    "Women",
+    "Kids",
+    "Sports",
+    "Casual",
+    "Formal",
+    "Boots",
+    "Sandals",
+    "Sneakers",
+  ],
+  electronics: [
+    "Laptops",
+    "Cameras",
+    "Mobiles",
+    "Headphones",
+    "Speakers",
+    "Tablets",
+    "Monitors",
+    "Smartwatches",
+  ],
+  fashion: [
+    "Men",
+    "Women",
+    "Kids",
+    "Ethnic Wear",
+    "Western Wear",
+    "Sportswear",
+    "Winter Wear",
+    "Footwear",
+    "Accessories",
+  ],
+  accessories: [
+    "Smart Watch Accessories",
+    "Phone Cases",
+    "Bags",
+    "Wallets",
+    "Belts",
+    "Jewelry",
+    "Sunglasses",
+    "Hats",
+  ],
+  appliances: [
+    "Refrigerators",
+    "Washing Machines",
+    "Microwaves",
+    "Air Conditioners",
+    "Vacuum Cleaners",
+    "Water Purifiers",
+    "Heaters",
+    "Fans",
+  ],
   furniture: [
-    "Sofa", "Chair", "Table", "Bed", "Wardrobe", "Bookshelf", "TV Unit",
-    "Dining Table", "Coffee Table", "Office Desk", "Recliner", "Cabinet",
-    "Dresser", "Nightstand", "Ottoman"
+    "Sofa",
+    "Chair",
+    "Table",
+    "Bed",
+    "Wardrobe",
+    "Bookshelf",
+    "TV Unit",
+    "Dining Table",
+    "Coffee Table",
+    "Office Desk",
+    "Recliner",
+    "Cabinet",
+    "Dresser",
+    "Nightstand",
+    "Ottoman",
   ],
   groceries: [
     "Fruits & Vegetables",
@@ -43,8 +102,8 @@ const subCategories = {
     "Baby Care",
     "Meat & Seafood",
     "Frozen Foods",
-    "Organic Products"
-  ]
+    "Organic Products",
+  ],
 };
 
 const brands = {
@@ -54,20 +113,17 @@ const brands = {
   accessories: ["Rolex", "Fossil", "Casio", "Titan", "Daniel Wellington"],
   appliances: ["LG", "Samsung", "Whirlpool", "Philips", "Bosch"],
   furniture: ["IKEA", "Ashley", "Wayfair", "La-Z-Boy"],
-  groceries: ["Whole Foods", "Trader Joe's", "Walmart", "Kroger"]
-
-  
+  groceries: ["Whole Foods", "Trader Joe's", "Walmart", "Kroger"],
 };
 
 const sizes = {
-  footwear: ["6", "7", "8", "9", "10",], // Shoe sizes
+  footwear: ["6", "7", "8", "9", "10"], // Shoe sizes
   electronics: [], // No sizes for electronics
   fashion: ["S", "M", "L", "XL", "XXL"], // Clothing sizes
   accessories: [], // No sizes for accessories
   appliances: [], // No sizes for appliances
   furniture: ["Small", "Medium", "Large"],
- groceries: ["Small", "Medium", "Large"]
-
+  groceries: ["Small", "Medium", "Large"],
 };
 
 const colors = {
@@ -77,7 +133,7 @@ const colors = {
   accessories: ["Black", "White", "Gold", "Silver", "Brown"],
   appliances: ["White", "Black", "Silver", "Gray"],
   furniture: ["Brown", "Black", "White", "Gray"],
-  groceries: ["Red", "Green", "Yellow", "Brown"]
+  groceries: ["Red", "Green", "Yellow", "Brown"],
 };
 
 const ProductForm = ({ formTitle }) => {
@@ -86,15 +142,15 @@ const ProductForm = ({ formTitle }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    price: "",
     images: [],
     category: "",
     subCategory: "",
     brand: "",
-    price: "",
-    discount: "",
-    stock: "",
     size: [],
     color: [],
+    discount: "",
+    stock: "",
     warranty: "No warranty",
     returnPolicy: "10 days return policy",
   });
@@ -269,16 +325,16 @@ const ProductForm = ({ formTitle }) => {
   }, [id]);
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div className="w-full mx-auto bg-white shadow-lg rounded-lg p-6">
       <h2 className="text-2xl font-semibold text-gray-700 mb-4">{formTitle}</h2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+        className="space-y-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         {Object.keys(formData).map((field) =>
           field !== "images" ? (
-            <div key={field}>
-              <label className="block text-sm font-medium text-gray-600 capitalize mb-1">
+            <div key={field} className=" order-2">
+              <label className="block font-medium text-gray-600 capitalize mb-1">
                 {field.replace(/([A-Z])/g, " $1")}:
               </label>
               {field === "category" ? (
@@ -362,26 +418,33 @@ const ProductForm = ({ formTitle }) => {
               )}
             </div>
           ) : (
-            <div key={field} className="col-span-full">
-              <label className="block text-sm font-medium text-gray-600">
+            <div key={field} className="col-span-full order-1 ">
+              <label className="block font-medium text-gray-600">
                 Images:
               </label>
+              <label
+                htmlFor="images"
+                className="border w-full inline-block rounded-md mt-2 p-2 cursor-pointer text-gray-500"
+              >
+                Choose Files
+              </label>
               <input
+                id="images"
                 type="file"
                 multiple
                 onChange={handleImageChange}
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 border rounded-md hidden"
               />
               {errors.images && (
                 <p className="text-red-500 text-sm">{errors.images}</p>
               )}
-              <div className="mt-4 grid grid-cols-4 gap-2">
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {imagePreviews.map((src, index) => (
                   <div key={index} className="relative">
                     <img
                       src={src}
                       alt={`Preview ${index}`}
-                      className="w-full h-24 object-cover rounded-md"
+                      className="w-full h-36 object-cover rounded-md  shadow-md"
                     />
                     <button
                       type="button"
@@ -404,7 +467,7 @@ const ProductForm = ({ formTitle }) => {
             </div>
           )
         )}
-        <div className="flex items-center gap-5 justify-between w-full col-span-full">
+        <div className="flex items-center gap-5 justify-between w-full col-span-full order-3">
           <button
             type="button"
             onClick={handleClearForm}

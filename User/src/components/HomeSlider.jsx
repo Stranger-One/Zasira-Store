@@ -38,8 +38,8 @@ const HomeSlider = () => {
         className="home-slider"
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide._id}>
-            <img src={slide.image} alt={slide.alt} className="w-full h-[200px] md:h-[400px] object-cover object-center " />
+          <SwiperSlide key={slide._id} >
+            <img src={slide.image} alt={slide.alt} className="w-full h-[200px] md:h-[500px] object-cover object-center " />
           </SwiperSlide>
         ))}
       </Swiper>

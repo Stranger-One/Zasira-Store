@@ -21,7 +21,7 @@ const GoogleLoginsuccess = () => {
         }
       );
       const data = res.data;
-      console.log(data);
+      // console.log(data);
     //   dispatch(loginUser(data));
         navigate("/");
     } catch (error) {

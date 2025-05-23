@@ -16,7 +16,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
-        const project_folder = 'Rahul_Store';
+        const project_folder = 'Zasira-Store';
 
         console.log({file});
         
@@ -63,5 +63,5 @@ const storage = new CloudinaryStorage({
 
 export const upload = multer({
     storage,
-    limits: { fileSize: 100 * 1024 * 1024 },
+    limits: { fileSize: 10 * 1024 * 1024 },
 });
