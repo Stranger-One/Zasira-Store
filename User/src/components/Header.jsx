@@ -1,35 +1,16 @@
-import {
-  FaSearch,
-  FaHeart,
-  FaShoppingCart,
-  FaUser,
-  FaHeadphones,
-} from "react-icons/fa";
-import { IoLocationOutline } from "react-icons/io5";
-import { MdMenu } from "react-icons/md";
+import { FaSearch, FaShoppingCart, FaUser, FaHeadphones } from "react-icons/fa";
 import { Menu, MenuItem, Button } from "@mui/material";
 import { IoMdClose } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
-import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   PersonOutlineOutlined,
   LocalShippingOutlined,
-  FavoriteBorderOutlined,
-  Logout,
-  KeyboardArrowDownOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Products from "../assets/Products";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsAuthenticated, setUserData } from "../redux/authSlice";
-import { setAddress } from "../redux/addressSlice";
-import { setItem } from "../redux/cartSlice";
+import { useSelector } from "react-redux";
+import LogoutBtn from "./LogoutBtn";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,16 +20,14 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search");
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.item);
-
+  
+  const navigate = useNavigate();
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
     if (!search) setSearchQuery("");
   }, [search]);
-
-  const open = Boolean(anchorEl);
-  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -103,17 +82,6 @@ const Header = () => {
     setOpenSuggestion(false);
   };
 
-  const handleLogout = () => {
-    handleClose();
-    localStorage.removeItem("token"); 
-    dispatch(setUserData(null));
-    dispatch(setIsAuthenticated(false));  
-    dispatch(setAddress(null))  
-    dispatch(setItem([])) 
-    navigate("/auth/sign-in");
-
-  };
-
   return (
     <header className="bg-white shadow-sm sticky top-0 left-0 w-full z-50">
       <div className=" w-full flex items-center justify-between gap-4 py-3 px-4 md:px-10 ">
@@ -122,7 +90,11 @@ const Header = () => {
           onClick={goToHome}
           className="hidden sm:flex items-center space-x-2 flex-shrink-0 cursor-pointer"
         >
-          <img src="/20240604_155758.png" alt="Shopstic Logo" className="h-13 " />
+          <img
+            src="/20240604_155758.png"
+            alt="Shopstic Logo"
+            className="h-13 "
+          />
         </button>
 
         <div className="flex items-center justify-end w-full gap-4 ">
@@ -161,51 +133,8 @@ const Header = () => {
             )}
           </div>
 
-          {/* Location */}
-          {/* <div className="hidden lg:flex items-center space-x-1 cursor-pointer border py-2 px-2 border-gray-300 rounded-md ">
-            <IoLocationOutline size={20} className="text-gray-600 ml-2" />
-            <select className="text-green-600 bg-transparent focus:outline-none cursor-pointer px-2">
-              <option value="all">All</option>
-              <option value="us">United States</option>
-              <option value="ca">Canada</option>
-              <option value="uk">United Kingdom</option>
-              <option value="au">Australia</option>
-              <option value="in">India</option>
-              <option value="de">Germany</option>
-              <option value="fr">France</option>
-              <option value="jp">Japan</option>
-              <option value="cn">China</option>
-              <option value="br">Brazil</option>
-              <option value="za">South Africa</option>
-              <option value="ru">Russia</option>
-              <option value="mx">Mexico</option>
-              <option value="it">Italy</option>
-              <option value="es">Spain</option>
-              <option value="kr">South Korea</option>
-              <option value="sa">Saudi Arabia</option>
-              <option value="ae">United Arab Emirates</option>
-              <option value="ng">Nigeria</option>
-              <option value="eg">Egypt</option>
-              <option value="tr">Turkey</option>
-              <option value="ar">Argentina</option>
-            </select>
-          </div> */}
-
           {/* Icons */}
           <div className="hidden md:flex items-center gap-2">
-            {/*<Button
-              onClick={() => navigate("/wish-list")}
-              sx={{ textTransform: "capitalize" }}
-              variant="text"
-              color="black"
-              className="relative cursor-pointer flex"
-            >
-              <FaHeart className="text-gray-600 text-lg" />
-              <span className="absolute top-0 left-0 bg-green-500 text-white text-xs px-1 rounded-full">
-                0
-              </span>
-              <span className="text-sm ml-1">Wishlist</span>
-            </Button>*/}
             <Button
               onClick={() => navigate("/cart")}
               sx={{ textTransform: "capitalize" }}
@@ -247,20 +176,8 @@ const Header = () => {
                 >
                   <LocalShippingOutlined /> Orders
                 </MenuItem>
-                {/* <MenuItem
-                  onClick={() => {
-                    navigate("/wish-list");
-                    handleClose();
-                  }}
-                  className=" flex whitespace-nowrap gap-1"
-                >
-                  <FavoriteBorderOutlined /> My Wishlist
-                </MenuItem> */}
-                <MenuItem
-                  onClick={handleLogout}
-                  className=" flex whitespace-nowrap gap-1"
-                >
-                  <Logout /> Logout
+                <MenuItem>
+                  <LogoutBtn />
                 </MenuItem>
               </Menu>
             </div>
@@ -298,36 +215,6 @@ const Header = () => {
             >
               <img src="/Logo.jpg" alt="Shopstic Logo" className="h-7" />
             </div>
-
-            {/* Location */}
-            {/* <div className="flex items-center cursor-pointer border py-2 px-2 border-gray-300 rounded-md ">
-              <IoLocationOutline size={20} className="text-gray-600 " />
-              <select className="bg-transparent focus:outline-none cursor-pointer w-32 ">
-                <option value="all">All</option>
-                <option value="us">United States</option>
-                <option value="ca">Canada</option>
-                <option value="uk">United Kingdom</option>
-                <option value="au">Australia</option>
-                <option value="in">India</option>
-                <option value="de">Germany</option>
-                <option value="fr">France</option>
-                <option value="jp">Japan</option>
-                <option value="cn">China</option>
-                <option value="br">Brazil</option>
-                <option value="za">South Africa</option>
-                <option value="ru">Russia</option>
-                <option value="mx">Mexico</option>
-                <option value="it">Italy</option>
-                <option value="es">Spain</option>
-                <option value="kr">South Korea</option>
-                <option value="sa">Saudi Arabia</option>
-                <option value="ae">United Arab Emirates</option>
-                <option value="ng">Nigeria</option>
-                <option value="eg">Egypt</option>
-                <option value="tr">Turkey</option>
-                <option value="ar">Argentina</option>
-              </select>
-            </div> */}
           </div>
           <div className="font-semibold grid grid-cols-2 gap-2 mt-4 ">
             <button
@@ -357,21 +244,7 @@ const Header = () => {
             >
               Orders
             </button>
-            {/* <button
-              onClick={() => {
-                navigate("/wish-list");
-                setIsMenuOpen(false);
-              }}
-              className="block cursor-pointer py-2 bg-zinc-300 text-center rounded-md textwhite "
-            >
-              My Wishlist
-            </button> */}
-            <button
-              onClick={handleLogout}
-              className="block cursor-pointer py-2 bg-zinc-300 text-center rounded-md textwhite "
-            >
-              Logout
-            </button>
+            <LogoutBtn className="block cursor-pointer py-2 bg-zinc-300 text-center rounded-md textwhite " />
           </div>
           <div className=""></div>
         </div>
@@ -379,10 +252,6 @@ const Header = () => {
 
       {/* Navigation Bar */}
       <div className="hidden md:flex border-t items-center py-2 px-10">
-        {/* <button className="bg-green-600 text-white px-4 py-1 rounded-md hidden lg:flex items-center space-x-2 cursor-pointer">
-          <MdMenu />
-          <span>Browse All Categories</span>
-        </button> */}
         <nav className="flex space-x-6 lg:ml-6">
           <Button
             onClick={goToHome}
@@ -400,21 +269,7 @@ const Header = () => {
             color="black"
             className="hover:text-green-600 capitalize group"
           >
-            Fashion {/* <KeyboardArrowDownOutlined /> */} 
-            {/* <ul className="absolute top-full left-0 bg-white min-w-40 flex-col items-start shadow-md shadow-gray-700 rounded hidden duration-150 py-4 group-hover:flex">
-              <li
-                onClick={(event) => handleCategory(event, "fashion", "men")}
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                men
-              </li>
-              <li
-                onClick={(event) => handleCategory(event, "fashion", "women")}
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                women
-              </li>
-            </ul> */}
+            Fashion
           </Button>
           <Button
             onClick={(event) => handleCategory(event, "electronics")}
@@ -423,33 +278,7 @@ const Header = () => {
             color="black"
             className="hover:text-green-600 capitalize group"
           >
-            Electronics {/* <KeyboardArrowDownOutlined />*/}
-            {/* <ul className="absolute top-full left-0 bg-white min-w-40 flex-col items-start shadow-md shadow-gray-700 rounded hidden duration-150 py-4 group-hover:flex">
-              <li
-                onClick={(event) =>
-                  handleCategory(event, "electronics", "smart-watch")
-                }
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                smart watch accesories
-              </li>
-              <li
-                onClick={(event) =>
-                  handleCategory(event, "electronics", "laptop")
-                }
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                laptops
-              </li>
-              <li
-                onClick={(event) =>
-                  handleCategory(event, "electronics", "camera")
-                }
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                camera
-              </li>
-            </ul> */}
+            Electronics
           </Button>
           <Button
             onClick={(event) => handleCategory(event, "appliances")}
@@ -458,21 +287,7 @@ const Header = () => {
             color="black"
             className="hover:text-green-600 capitalize group"
           >
-            Home appliances {/*<KeyboardArrowDownOutlined />*/}
-            {/* <ul className="absolute top-full left-0 bg-white min-w-40 flex-col items-start shadow-md shadow-gray-700 rounded hidden duration-150 py-4 group-hover:flex">
-              <li
-                onClick={(event) => handleCategory(event, "bags", "men-bags")}
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                men bags
-              </li>
-              <li
-                onClick={(event) => handleCategory(event, "bags", "women-bags")}
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                women bags
-              </li>
-            </ul> */}
+            Home appliances
           </Button>
           <Button
             onClick={(event) => handleCategory(event, "footwear")}
@@ -481,25 +296,7 @@ const Header = () => {
             color="black"
             className="hover:text-green-600 capitalize group"
           >
-            Footwear {/*<KeyboardArrowDownOutlined />*/}
-            {/* <ul className="absolute top-full left-0 bg-white min-w-40 flex-col items-start shadow-md shadow-gray-700 rounded hidden duration-150 py-4 group-hover:flex">
-              <li
-                onClick={(event) =>
-                  handleCategory(event, "footwear", "men-footwear")
-                }
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                men footware
-              </li>
-              <li
-                onClick={(event) =>
-                  handleCategory(event, "footwear", "women-footwear")
-                }
-                className="px-5 py-1 hover:bg-gray-200 w-full text-start whitespace-nowrap"
-              >
-                women footware
-              </li>
-            </ul> */}
+            Footwear
           </Button>
           <Button
             onClick={(event) => handleCategory(event, "groceries")}

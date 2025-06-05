@@ -13,10 +13,11 @@ import ProductImageGallery from "./ProductImageGallery"
 import ReviewForm from "./ReviewForm"
 import ServiceSection from "./ServiceSection"
 import SubscribeSection from "./SubscribeSection"
-
+import LogoutBtn from "./LogoutBtn"
 
 
 export {
+    LogoutBtn,
     AddressForm,
     Checkout,
     ReviewForm,

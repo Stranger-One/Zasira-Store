@@ -7,6 +7,8 @@ const AddressForm = () => {
   const address = useSelector((state) => state.address.address);
   const [activeSaveButton, setActiveSaveButton] = useState(false);
 
+  console.log(address);
+  
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -61,6 +63,7 @@ const AddressForm = () => {
             <input
               type="text"
               name="fullName"
+              required
               placeholder="Full Name *"
               value={form.fullName}
               onChange={handleChange}
@@ -73,6 +76,7 @@ const AddressForm = () => {
           <input
             type="email"
             name="email"
+            required
             placeholder="Email Address"
             value={form.email}
             onChange={handleChange}
@@ -85,6 +89,7 @@ const AddressForm = () => {
             <input
               type="text"
               name="phoneNumber"
+              required
               placeholder="Phone Number *"
               value={form.phoneNumber}
               onChange={handleChange}
@@ -98,6 +103,7 @@ const AddressForm = () => {
             <input
               type="text"
               name="country"
+              required
               placeholder="Country *"
               value={form.country}
               onChange={handleChange}
@@ -111,6 +117,7 @@ const AddressForm = () => {
           <input
             type="text"
             name="street"
+            required
             placeholder="House number and street name *"
             value={form.street}
             onChange={handleChange}
@@ -134,6 +141,7 @@ const AddressForm = () => {
           <input
             type="text"
             name="city"
+            required
             placeholder="Town / City *"
             value={form.city}
             onChange={handleChange}
@@ -146,6 +154,7 @@ const AddressForm = () => {
           <input
             type="text"
             name="state"
+            required
             placeholder="State / County *"
             value={form.state}
             onChange={handleChange}
@@ -158,6 +167,7 @@ const AddressForm = () => {
           <input
             type="text"
             name="postcode"
+            required
             placeholder="Postcode / ZIP *"
             value={form.postcode}
             onChange={handleChange}
@@ -169,9 +179,8 @@ const AddressForm = () => {
         <div className=" flex justify-end mt-5">
           <button
             type="submit"
-            className={`text-lg px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white cursor-pointer font-semibold ${
-              activeSaveButton ? "opacity-100" : "opacity-50"
-            }`}
+            disabled={!activeSaveButton }
+            className={`text-lg px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white cursor-pointer font-semibold disabled:opacity-50`}
           >
             Save Address
           </button>

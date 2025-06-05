@@ -22,6 +22,9 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
+  console.log(cart);
+  
+
   const changeQuantity = async (id, quantity, value) => {
     // console.log({ id, quantity, value });
 
@@ -245,9 +248,10 @@ const Cart = () => {
             </div>
             <div className="flex w-full items-center justify-end">
               <button
+              disabled={!cart.length}
               onClick={handleCart}
               type="button"
-                className=" bg-green-600 text-white font-semibold py-2 rounded-md hover:bg-green-700 px-4 transition w-fit cursor-pointer"
+                className=" bg-green-600 text-white font-semibold py-2 rounded-md hover:bg-green-700 px-4 transition w-fit cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Proceed To CheckOut
               </button>
