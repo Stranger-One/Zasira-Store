@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { setToken, validateToken } from "../redux/authSlice";
 
 const GoogleLoginsuccess = () => {
   const navigate = useNavigate();
@@ -21,8 +22,8 @@ const GoogleLoginsuccess = () => {
         }
       );
       const data = res.data;
-      // console.log(data);
-    //   dispatch(loginUser(data));
+      console.log(data);
+      dispatch(validateToken(data));
         navigate("/");
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -34,12 +35,13 @@ const GoogleLoginsuccess = () => {
     const token = new URLSearchParams(window.location.search).get("token");
     console.log({ token });
     if (token) {
+      dispatch(setToken(token))
       localStorage.setItem("token", token);
     } else {
       console.log("No token found in URL.");
     }
 
-    fetchUser();
+    // fetchUser();
   }, []);
 
   return (

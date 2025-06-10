@@ -4,12 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../services/authServices";
 import toast from "react-hot-toast";
 import { LuLoaderCircle } from "react-icons/lu";
-
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/authSlice";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate();
+  const { loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,21 +27,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
-    setLoading(true)
-
-    const response = await signUp(formData);
-    // console.log(response);
-
-    if (response.success) {
-      localStorage.setItem("token", response.token);
-      toast.success(response.message);
-      navigate("/");
-    } else {
-      toast.error(response.message);
-    }
-
-    setLoading(false)
+    dispatch(register(formData));
   };
 
   return (
@@ -81,7 +69,11 @@ const SignUp = () => {
             type="submit"
             className="w-full bg-green-500 text-white py-2 mt-6 rounded-md hover:bg-green-600  cursor-pointer"
           >
-           {loading ? <LuLoaderCircle size={20} className={`animate-spin mx-auto`} /> : "Sign Up"}
+            {loading ? (
+              <LuLoaderCircle size={20} className={`animate-spin mx-auto`} />
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
         <div className="flex items-center my-4">

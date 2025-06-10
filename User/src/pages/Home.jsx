@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { FeaturedCategories, FeaturedProducts, Footer, HomeSlider, NewArrivals, PopularProducts, ServiceSection, SubscribeSection } from '../components'
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { setIsAuthenticated, setUserData } from '../redux/authSlice';
+// import { setIsAuthenticated, setUserData } from '../redux/authSlice';
 import { getUserDetails } from '../services/authServices';
 
 const Home = () => {

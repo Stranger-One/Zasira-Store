@@ -6,11 +6,8 @@ import User from "../models/UserModel.js";
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
-  // console.log({ name, email, password });
-
   try {
     const checkUser = await User.findOne({ email });
-    // console.log(checkUser.response.data);
     if (checkUser) {
       return res.status(400).json({
         success: false,
@@ -35,13 +32,18 @@ const registerUser = async (req, res) => {
       "CLIENT_SECRET_KEY",
       { expiresIn: "1d" }
     );
-
     await user.save();
 
     res.status(200).json({
       success: true,
-      token,
       message: "Registration successfull :)",
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+      },
     });
   } catch (error) {
     console.log("Registration failed :: ", error);
@@ -55,21 +57,21 @@ const registerUser = async (req, res) => {
 //Login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log({email, password});
+  
 
   try {
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return res.status(200).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid credentials!",
       });
     }
 
-    //     // console.log(user);
-
     const matchPassword = await bcrypt.compare(password, user.password);
     if (!matchPassword) {
-      return res.status(200).json({
+      return res.status(401).json({
         success: false,
         message: "Invalid credentials!",
       });
@@ -86,22 +88,11 @@ const loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // res.cookie("token", token, { httpOnly: true, secure: false }).json({
-    //     success: true,
-    //     message: "Login successfull :)",
-    //     data: {
-    //         id: user._id,
-    //         email: user.email,
-    //         role: user.role,
-    //         name: user.name
-    //     }
-    // })
-
     res.status(200).json({
       success: true,
       message: "Login successfull :)",
       token,
-      data: {
+      user: {
         id: user._id,
         email: user.email,
         role: user.role,
@@ -226,6 +217,11 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-
-
-export { registerUser, loginUser, logoutUser, getUserDetails, updateUser, loginAdmin };
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUserDetails,
+  updateUser,
+  loginAdmin,
+};

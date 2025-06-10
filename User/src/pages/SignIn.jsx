@@ -5,12 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../services/authServices";
 import toast from "react-hot-toast";
 import { LuLoaderCircle } from "react-icons/lu";
-
+import { login } from "../redux/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate();
+  const { loading } = useSelector(state => state.auth)
+  const dispatch = useDispatch();
+
 
   const [formData, setFormData] = useState({
     email: "",
@@ -25,29 +27,16 @@ const SignIn = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("loging....", formData);
+    
     e.preventDefault();
-    // console.log(formData);
-    setLoading(true)
-    
-    const response = await signIn(formData);
-    // console.log(response);
+    dispatch(login(formData));
 
-    
-    if(response.success){
-      localStorage.setItem("token", response.token)
-      toast.success(response.message)
-      navigate("/");
+  };
 
-    } else {
-      toast.error(response.message)
-    }
-
-    setLoading(false)
-  }
-    const handleGoogleLogin = () => {
+  const handleGoogleLogin = () => {
     // console.log("Google Login clicked");
-    window.open('http://localhost:5000/auth/google', '_self');
-
+    window.open("http://localhost:5000/auth/google", "_self");
   };
 
   return (
@@ -94,7 +83,11 @@ const SignIn = () => {
           </div>
 
           <button className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition  cursor-pointer">
-            {loading ? <LuLoaderCircle size={20} className={`animate-spin mx-auto`} /> : "Sign In"}
+            {loading ? (
+              <LuLoaderCircle size={20} className={`animate-spin mx-auto`} />
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
@@ -104,7 +97,10 @@ const SignIn = () => {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer">
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center border py-2 rounded-lg hover:bg-gray-100 transition cursor-pointer"
+        >
           <FcGoogle className="mr-2" size={22} />
           Sign in with Google
         </button>
