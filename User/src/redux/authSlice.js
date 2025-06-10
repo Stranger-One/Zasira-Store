@@ -23,8 +23,8 @@ export const login = createAsyncThunk(
   }
 );
 
-export const register = createAsyncThunk(
-  "auth/register",
+export const signUp = createAsyncThunk(
+  "auth/signUp",
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await api.post("/register", credentials);
@@ -78,10 +78,10 @@ const authSlice = createSlice({
         console.log(action.payload);
         toast.error(action.payload.message);
       })
-      .addCase(register.pending, (state) => {
+      .addCase(signUp.pending, (state) => {
         state.loading = true;
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(signUp.fulfilled, (state, action) => {
         state.userData = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem("token", action.payload.token);
@@ -89,7 +89,7 @@ const authSlice = createSlice({
         state.loading = false;
         toast.success(action.payload.message);
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
         toast.error(action.payload.message);
       })

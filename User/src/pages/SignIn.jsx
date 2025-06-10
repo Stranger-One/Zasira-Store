@@ -1,37 +1,36 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../services/authServices";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import { LuLoaderCircle } from "react-icons/lu";
 import { login } from "../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loading } = useSelector(state => state.auth)
+  const { loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const loginSchema = z.object({
+    email: z.string().email("Invalid Email"),
+    password: z.string(),
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const handleSubmit = async (e) => {
+  const submit = (formData) => {
     console.log("loging....", formData);
-    
-    e.preventDefault();
-    dispatch(login(formData));
 
+    dispatch(login(formData));
   };
 
   const handleGoogleLogin = () => {
@@ -46,24 +45,25 @@ const SignIn = () => {
           Sign In
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(submit)}>
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <input
-              name="email"
-              onChange={handleChange}
               type="email"
+              {...register("email")}
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Email"
             />
+            {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message} </p>
+          )}
           </div>
 
           <div className="mb-4 relative">
             <label className="block text-gray-700">Password</label>
             <input
-              name="password"
-              onChange={handleChange}
               type={showPassword ? "text" : "password"}
+              {...register("password")}
               className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Password"
             />
