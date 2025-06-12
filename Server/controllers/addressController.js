@@ -54,7 +54,7 @@ const addAddress = async (req, res) => {
       res.status(201).json({
         success: true,
         message: "Address added successfully",
-        data: newAddress,
+        address: newAddress,
       });
     } else {
       const updatedAddress = await Address.findOneAndUpdate(
@@ -76,7 +76,7 @@ const addAddress = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Address updated successfully",
-        data: updatedAddress,
+        address: updatedAddress,
       });
     }
   } catch (error) {
@@ -99,12 +99,18 @@ const getAddress = async (req, res) => {
       });
     }
 
-    const addressList = await Address.find({ user: userId });
+    const address = await Address.findOne({ user: userId });
+    if(!address){
+      return res.status(404).json({
+        success: false,
+        message: "Address not found",
+        });
+    }
 
     res.status(200).json({
       success: true,
       message: "Address find successfully",
-      data: addressList,
+      address,
     });
   } catch (error) {
     console.error(error);

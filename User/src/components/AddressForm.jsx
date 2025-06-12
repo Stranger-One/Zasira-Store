@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress } from "../redux/addressSlice";
+import { saveAddress } from "../redux/addressSlice";
 
 const AddressForm = () => {
   const userData = useSelector((state) => state.auth.userData);
   const address = useSelector((state) => state.address.address);
   const [activeSaveButton, setActiveSaveButton] = useState(false);
-
-  console.log(address);
   
   const [form, setForm] = useState({
     fullName: "",
@@ -47,14 +45,13 @@ const AddressForm = () => {
     );
   };
 
-  const saveAddress = async (e) => {
+  const submitAddress = async (e) => {
     e.preventDefault();
-    // console.log("Address saved", { ...form, user: userData?._id });
-    dispatch(addAddress({ ...form, user: userData?._id }));
+    dispatch(saveAddress({ ...form, user: userData?.id }));
   };
 
   return (
-    <form onSubmit={saveAddress}>
+    <form onSubmit={submitAddress}>
       <div className="col-span-2 p-6 bg-white text-black rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4">BILLING DETAILS</h2>
 

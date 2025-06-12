@@ -24,9 +24,7 @@ const SignUp = () => {
     resolver: zodResolver(registerSchema)
   })
 
-  const submit = (formData) => {
-    console.log("formData", formData);
-    
+  const submit = (formData) => {    
     dispatch(signUp(formData));
   };
 

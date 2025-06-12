@@ -33,7 +33,9 @@ const OrderList = () => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders/getAllOrders`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/orders/get-all-orders`);
+        console.log(response.data);
+        
         setOrders(response.data.data);
       } catch (error) {
         console.error("Failed to fetch orders:", error);

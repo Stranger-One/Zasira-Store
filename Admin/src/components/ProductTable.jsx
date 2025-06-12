@@ -15,6 +15,7 @@ const AdminProductTable = ({ products, onDelete }) => {
             <th className="py-2 px-4 text-left">Brand</th>
             <th className="py-2 px-4 text-left">Price</th>
             <th className="py-2 px-4 text-left">Rating</th>
+            <th className="py-2 px-4 text-left">Stock</th>
             <th className="py-2 px-4 text-center">Actions</th>
           </tr>
         </thead>
@@ -44,6 +45,7 @@ const AdminProductTable = ({ products, onDelete }) => {
                   </span>
                 ))}
               </td>
+              <td  className="py-2 px-4">{product.stock} </td>
               <td className="py-2 px-4 flex justify-center items-center h-full gap-3">
                 <Link to={`/admin/product/${product._id}`} className="text-gray-500 hover:text-gray-700 cursor-pointer">
                   <FaEye size={20} />

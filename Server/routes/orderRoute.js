@@ -7,8 +7,8 @@ import { addOrder, getAllOrders, getOrder, getOrders, updateOrder,} from '../con
 const router = express.Router()
 
 router.post('/addOrder', addOrder)
-router.get('/get/:userId', getOrders)
-router.get('/getAllOrders', getAllOrders)
+router.get('/get-orders/:userId', getOrders)
+router.get('/get-all-orders', getAllOrders)
 router.get('/get-order/:orderId', getOrder)
 router.put('/update/:orderId', updateOrder)
 

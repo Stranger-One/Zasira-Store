@@ -81,7 +81,7 @@ app.get(
 
 app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)
-app.use("/api/carts", cartRouter)
+app.use("/api/cart", cartRouter)
 app.use("/api/addresses", addressRouter)
 app.use("/api/orders", orderRouter)
 app.use("/api/banner", bannerRouter)

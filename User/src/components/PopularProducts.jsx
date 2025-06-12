@@ -40,19 +40,12 @@ const PopularProducts = () => {
     "appliances",
   ];
   const [catIndex, setCatIndex] = useState(0);
-
   const [category, setCategory] = useState("fashion"); 
   const [popularProducts, setPopularProducts] = useState([]);
 
-  // const popularProducts = Products.filter(
-  //   (p) => p.category == category.toLowerCase()
-  // ).slice(0, 5);
-
   const fetchProducts = async () => {
     const response = await getProducts({category, limit: 10});
-    console.log(response.data);
     setPopularProducts(response.data);
-    
   }
 
   useEffect(()=>{

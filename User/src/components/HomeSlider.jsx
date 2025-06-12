@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -8,27 +7,24 @@ import "swiper/css/pagination";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { getBanners } from "../services/bannerServices";
 
-
 const HomeSlider = () => {
   const [slides, setSlides] = useState([]);
 
   const fetchBanners = async () => {
     const response = await getBanners();
-    // console.log({response});
     if (response && response.data) {
       setSlides(response.data);
     }
+  };
 
-  }
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchBanners();
-  }, [])
+  }, []);
 
   return (
     <div className="home-slider-container">
       <Swiper
-       key={slides.length}
+        key={slides.length}
         modules={[Navigation, Pagination, Autoplay]}
         slidesPerView={1}
         loop={true}
@@ -38,8 +34,12 @@ const HomeSlider = () => {
         className="home-slider"
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide._id} >
-            <img src={slide.image} alt={slide.alt} className="w-full h-[200px] md:h-[500px] object-cover object-center " />
+          <SwiperSlide key={slide._id}>
+            <img
+              src={slide.image}
+              alt={slide.alt}
+              className="w-full h-[200px] md:h-[500px] object-cover object-center "
+            />
           </SwiperSlide>
         ))}
       </Swiper>

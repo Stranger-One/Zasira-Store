@@ -3,14 +3,14 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_SERVER_BASE_URL}/api/addresses/`,
+  baseURL: `${import.meta.env.VITE_SERVER_BASE_URL}/api/addresses`,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-export const addAddress = createAsyncThunk(
-  "addAddress",
+export const saveAddress = createAsyncThunk(
+  "user/saveAddress",
   async (
     {
       user,
@@ -27,7 +27,7 @@ export const addAddress = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.post("add", {
+      const response = await api.post("/add", {
         user,
         fullName,
         email,
@@ -41,14 +41,16 @@ export const addAddress = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
+      console.log("Failed to save address");
       return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
 
 export const fetchAddress = createAsyncThunk(
-  "fetchAddress",
-  async ({ userId }, { rejectWithValue }) => {
+  "user/fetchAddress",
+  async (_, { getState, rejectWithValue }) => {
+    const userId = getState().auth.userData.id
     try {
       const response = await api.get(`get/${userId}`);
       return response.data;
@@ -61,37 +63,21 @@ export const fetchAddress = createAsyncThunk(
 const addressSlice = createSlice({
   name: "address",
   initialState: {
-    address: {},
+    address: null,
   },
-  reducers: {
-    setAddress: (state, action) => {
-      state.address = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addAddress.fulfilled, (state, action) => {
-        if (action.payload && action.payload.data) {
-          // console.log("Full action object:", action); // Debugging: Log entire action object
-          // console.log("Payload:", action.payload); // Ensure payload is logged
-
-          // toast.success(action.payload.message);
-          state.address = action.payload.data;
-        } else {
-          toast.error("Unexpected response format");
-        }
+      .addCase(saveAddress.fulfilled, (state, action) => {
+        toast.success(action.payload.message);
+        state.address = action.payload.address;
       })
-      .addCase(addAddress.rejected, (state, action) => {
+      .addCase(saveAddress.rejected, (state, action) => {
+        toast.error(action.payload.message);
         console.error("Add address failed:", action.payload);
       })
       .addCase(fetchAddress.fulfilled, (state, action) => {
-        // console.log("Full action object:", action); // Debugging: Log entire action object
-        // console.log("Payload:", action.payload); // Ensure payload is logged
-        if (action.payload && action.payload.data) {
-          state.address = action.payload.data[0];
-        } else {
-          toast.error("Unexpected response format");
-        }
+          state.address = action.payload.address;  
       })
       .addCase(fetchAddress.rejected, (state, action) => {
         console.error("Fetch address failed:", action.payload);
@@ -99,5 +85,4 @@ const addressSlice = createSlice({
   },
 });
 
-export const { setAddress } = addressSlice.actions;
 export default addressSlice.reducer;

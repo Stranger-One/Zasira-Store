@@ -28,8 +28,6 @@ const SignIn = () => {
   });
 
   const submit = (formData) => {
-    console.log("loging....", formData);
-
     dispatch(login(formData));
   };
 

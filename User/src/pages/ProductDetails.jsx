@@ -37,16 +37,18 @@ import { getProductDetails, getProducts } from "../services/productsServices";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { addToCart } from "../redux/cartSlice";
+import { LuLoaderCircle } from "react-icons/lu";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [relatedProducts, setrelatedProducts] = useState(null);
   const userData = useSelector((state) => state.auth.userData);
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.cart);
+  const [pageLoading, setPageLoading] = useState(false);
 
   // console.log({ userData });
 
@@ -55,17 +57,18 @@ const ProductDetails = () => {
   //   : null;
 
   const getThisProduct = async () => {
-    setLoading(true);
+    setPageLoading(true);
     const product = await getProductDetails(id);
     // console.log({ product });
     setProduct(product?.data);
 
     const relProducts = await getProducts({
       category: product?.data?.category,
+      limit: 10,
     });
     setrelatedProducts(relProducts.data);
 
-    setLoading(false);
+    setPageLoading(false);
   };
 
   const addToCartProduct = async () => {
@@ -73,19 +76,14 @@ const ProductDetails = () => {
       toast.error("Please select a size");
       return;
     }
-    
-     dispatch(addToCart({ 
-      userId: userData?._id, 
-      productId: id, 
-      quantity,
-      size: selectedSize,
-      details: product, 
-    }));
-    // const product = await addToCart({ userId: userData._id, productId: id, quantity });
-    // console.log({product});
-    // if (product?.success) {
-    //   console.log("Product added to cart!");
-    // }
+
+    dispatch(
+      addToCart({
+        productId: id,
+        quantity,
+        size: selectedSize,
+      })
+    );
   };
 
   useEffect(() => {
@@ -129,7 +127,7 @@ const ProductDetails = () => {
         </Breadcrumbs>
       </div>
       <div className="w-full px-4 md:px-10 py-5">
-        {loading ? (
+        {pageLoading ? (
           <div>
             <PageLoader />
           </div>
@@ -138,7 +136,7 @@ const ProductDetails = () => {
             <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mb-4 ">
               {/* Image section */}
               <div className=" w-full max-w-[600px] h-[600px] mx-auto">
-                <ProductImageGallery images={product?.images}/>
+                <ProductImageGallery images={product?.images} />
               </div>
               {/* Details section */}
               <div className="space-y-5 w-full ">
@@ -193,7 +191,7 @@ const ProductDetails = () => {
                         id={size}
                         className="hidden peer"
                         onChange={() => setSelectedSize(size)}
-                              checked={selectedSize === size}
+                        checked={selectedSize === size}
                       />
                       <label
                         htmlFor={size}
@@ -234,7 +232,15 @@ const ProductDetails = () => {
                     type="button"
                     className="py-2 px-3 bg-[#00A63E] hover:bg-[#008f34] text-lg font-semibold rounded-md cursor-pointer text-white flex flex-nowrap items-center gap-2"
                   >
-                    Add to Cart <RiShoppingCartLine size={20} />
+                    Add to Cart{" "}
+                    {loading ? (
+                      <LuLoaderCircle
+                        size={20}
+                        className=" animate-spin"
+                      />
+                    ) : (
+                      <RiShoppingCartLine size={20} />
+                    )}
                   </button>
                   <button
                     type="button"
@@ -323,7 +329,7 @@ const ProductDetails = () => {
                           {/* Review Content */}
                           <CardContent sx={{ flex: 1 }}>
                             <Typography variant="body2" color="textSecondary">
-                              {review?.createdAt.split('T')[0]}
+                              {review?.createdAt.split("T")[0]}
                             </Typography>
 
                             <Typography variant="body1" sx={{ mt: 1 }}>
@@ -366,7 +372,11 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-                <ReviewForm userId={userData?._id} productId={id} getThisProduct={getThisProduct} />
+                <ReviewForm
+                  userId={userData?._id}
+                  productId={id}
+                  getThisProduct={getThisProduct}
+                />
               </div>
 
               {/* Related Products */}

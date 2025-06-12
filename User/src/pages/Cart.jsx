@@ -12,18 +12,17 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, updateCart } from "../services/cartServices.js";
-import { setItem } from "../redux/cartSlice.js";
+import { removeFromCart, setItem, updateQuantity } from "../redux/cartSlice.js";
 import toast from "react-hot-toast";
 
 const Cart = () => {
   const [openCheckout, setOpenCheckout] = useState(false);
   const userData = useSelector((state) => state.auth.userData);
-  const cart = useSelector((state) => state.cart.item);
+  const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   console.log(cart);
-  
 
   const changeQuantity = async (id, quantity, value) => {
     // console.log({ id, quantity, value });
@@ -61,12 +60,12 @@ const Cart = () => {
   }, 0);
 
   const handleCart = () => {
-    if(cart.length){
-      navigate('/check-out')
+    if (cart.length) {
+      navigate("/check-out");
     } else {
-      return toast.error("Your cart is empty, Please add products to cart.")
+      return toast.error("Your cart is empty, Please add products to cart.");
     }
-  }
+  };
 
   useEffect(() => {
     window.scrollTo({
@@ -86,7 +85,7 @@ const Cart = () => {
           {cart.length ? (
             <TableContainer>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead sx={{ bgcolor: "#f7f7f7" }}>
+                <TableHead sx={{ bgcolor: "#f7f7f7" }}>
                   <TableRow>
                     <TableCell sx={{ fontWeight: "bold", fontSize: "18px" }}>
                       Product
@@ -155,7 +154,7 @@ const Cart = () => {
                         align="center"
                         sx={{ fontSize: "14px md:16px" }}
                       >
-                         Rs. {product.details?.price}
+                        Rs. {product.details?.price}
                       </TableCell>
                       <TableCell
                         align="center"
@@ -164,10 +163,12 @@ const Cart = () => {
                         <div className="flex justify-center items-center">
                           <button
                             onClick={() =>
-                              changeQuantity(
-                                product?.productId,
-                                product?.quantity,
-                                -1
+                              dispatch(
+                                updateQuantity({
+                                  productId: product?.productId,
+                                  size: product?.size,
+                                  quantity: -1,
+                                })
                               )
                             }
                             className="h-6 w-6 md:h-8 md:w-8 rounded-md flex items-center justify-center bg-gray-200 hover:bg-gray-300 cursor-pointer"
@@ -179,10 +180,12 @@ const Cart = () => {
                           </span>
                           <button
                             onClick={() =>
-                              changeQuantity(
-                                product?.productId,
-                                product.quantity,
-                                1
+                              dispatch(
+                                updateQuantity({
+                                  productId: product?.productId,
+                                  size: product?.size,
+                                  quantity: 1,
+                                })
                               )
                             }
                             className="h-6 w-6 md:h-8 md:w-8 rounded-md flex items-center justify-center bg-gray-200 hover:bg-gray-300 cursor-pointer"
@@ -194,7 +197,13 @@ const Cart = () => {
                       <TableCell align="center">
                         <button
                           onClick={() =>
-                            deleteProductFromCart(product.productId)
+                            dispatch(
+                              removeFromCart({
+                                productId: product.productId,
+                                size: product.size,
+                                quantity: product.quantity,
+                              })
+                            )
                           }
                           style={{ color: "#f44336", cursor: "pointer" }}
                         >
@@ -248,9 +257,9 @@ const Cart = () => {
             </div>
             <div className="flex w-full items-center justify-end">
               <button
-              disabled={!cart.length}
-              onClick={handleCart}
-              type="button"
+                disabled={!cart.length}
+                onClick={handleCart}
+                type="button"
                 className=" bg-green-600 text-white font-semibold py-2 rounded-md hover:bg-green-700 px-4 transition w-fit cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Proceed To CheckOut

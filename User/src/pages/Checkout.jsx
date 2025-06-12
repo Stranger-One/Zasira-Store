@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress, fetchAddress } from "../redux/addressSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { makeOrder } from "../services/orderServices";
 import { AddressForm } from "../components";
-import { clearCart } from "../services/cartServices";
-import { addToCart } from "../redux/cartSlice";
-import { Link } from "react-router-dom";
+import { clearCart } from "../redux/cartSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const cart = useSelector((state) => state.cart.item);
+  const cart = useSelector((state) => state.cart.cart);
   const userData = useSelector((state) => state.auth.userData);
   const address = useSelector((state) => state.address.address);
-
+  const navigate = useNavigate()
   const dispatch = useDispatch();
+
   const validate = () => {
     if (
       !address.fullName ||
@@ -40,7 +38,7 @@ const Checkout = () => {
     );
   }, 0);
 
-  // handlePayment Function
+  // handle payment Function
   const handlePayment = async (e) => {
     e.preventDefault();
 
@@ -66,7 +64,7 @@ const Checkout = () => {
     }
   };
 
-  // handlePaymentVerify Function
+  // handle payment verify Function
   const handlePaymentVerify = async (data) => {
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -108,10 +106,10 @@ const Checkout = () => {
     const rzp1 = new window.Razorpay(options);
     rzp1.open();
   };
-
+  // handle order Function
   const handleOrder = async ({ order_id, payment_id, signature }) => {
     const order = await makeOrder({
-      user: userData?._id,
+      user: userData?.id,
       orders: cart.map((item) => ({
         product: item.productId,
         quantity: item.quantity,
@@ -128,10 +126,8 @@ const Checkout = () => {
 
     if (order.success) {
       toast.success("Order placed successfully");
-      // clear cart 
-      await clearCart(userData?._id)
-      dispatch(addToCart({ userId: userData?._id }));
-
+      dispatch(clearCart());
+      navigate("/orders")
       // console.log({ order });
     }
   };

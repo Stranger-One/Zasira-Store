@@ -20,8 +20,8 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search");
-  const cart = useSelector((state) => state.cart.item);
-  
+  const cart = useSelector((state) => state.cart.cart);
+
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
 
@@ -84,7 +84,7 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 left-0 w-full z-50">
-      <div className=" w-full flex items-center justify-between gap-4 py-3 px-4 md:px-10 ">
+      <div className=" w-full flex items-center justify-between gap-4 py-2 px-4 md:px-10 ">
         {/* Logo */}
         <button
           onClick={goToHome}
@@ -97,6 +97,7 @@ const Header = () => {
           />
         </button>
 
+        {/* Large Screen Navigation */}
         <div className="flex items-center justify-end w-full gap-4 ">
           {/* Search Bar */}
           <div className="relative flex-grow max-w-lg flex-shrink-0 z-10">
@@ -198,7 +199,7 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Small Screen Navigation */}
         <div
           className={`${
             isMenuOpen ? "block" : "hidden"
@@ -250,8 +251,9 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Navigation Bar */}
-      <div className="hidden md:flex border-t items-center py-2 px-10">
+      {/* Category Navigation Bar */}
+      {/* h-0 overflow-hidden */}
+      <div className="hidden md:flex border-t items-center py-2 px-10 ">
         <nav className="flex space-x-6 lg:ml-6">
           <Button
             onClick={goToHome}
@@ -319,7 +321,7 @@ const Header = () => {
         </nav>
         <div className="ml-auto hidden md:flex flex-wrap justify-end items-center space-x-2 text-green-600 font-bold">
           <FaHeadphones className="text-gray-600" />
-          <span>7609858433</span>
+          <span>8881111888</span>
           <span className="text-gray-500 text-sm">24/7 Support Center</span>
         </div>
       </div>
