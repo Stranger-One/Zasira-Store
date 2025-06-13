@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
         email: user.email,
         name: user.name,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
     await user.save();
@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
         email: user.email,
         name: user.name,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -193,7 +193,7 @@ const loginAdmin = async (req, res) => {
         email: user.email,
         name: user.name,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
