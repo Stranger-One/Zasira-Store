@@ -75,7 +75,6 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        console.log(action.payload);
         toast.error(action.payload.message);
       })
       .addCase(signUp.pending, (state) => {

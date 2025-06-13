@@ -35,7 +35,6 @@ export const createReview = async (req, res) => {
         message: "Product not found",
       });
     }
-    console.log(product);
 
     res.status(201).json({
       success: true,

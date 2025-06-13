@@ -41,7 +41,6 @@ export const saveAddress = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      console.log("Failed to save address");
       return rejectWithValue(error.response?.data || error.message);
     }
   }

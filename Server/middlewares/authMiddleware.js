@@ -3,8 +3,6 @@ import jwt from "jsonwebtoken"
 
 const authMiddleware = (req, res, next) => {
     const token = req.query.token ? JSON.parse(req.query.token) : req.headers.authorization.split(" ")[1];
-
-    console.log("authorization", token);
     
     if (!token) {
         return res.status(400).json({
@@ -13,11 +11,8 @@ const authMiddleware = (req, res, next) => {
         });
     }
 
-    // console.log(token);
-
     try {
         const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("decodedUser", decodedUser);
         req.userId = decodedUser.id;
         next();
 

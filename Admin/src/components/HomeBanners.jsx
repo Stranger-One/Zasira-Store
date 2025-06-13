@@ -47,7 +47,6 @@ const AddBanner = ({ getBanners, setOpenForm }) => {
           },
         }
       );
-      console.log(response.data);
       if (response?.data?.success) {
         toast.success(response.data.message);
         getBanners();
@@ -66,7 +65,10 @@ const AddBanner = ({ getBanners, setOpenForm }) => {
       <div className="p-5 rounded-md shadow-lg bg-white min-w-lg">
         <div className="flex w-full justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Add New Banner</h1>
-          <button onClick={() => setOpenForm(false)} className=" p-2 cursor-pointer text-white rounded-full">
+          <button
+            onClick={() => setOpenForm(false)}
+            className=" p-2 cursor-pointer text-white rounded-full"
+          >
             <IoMdClose size={24} className="text-black" />
           </button>
         </div>
@@ -118,7 +120,11 @@ const AddBanner = ({ getBanners, setOpenForm }) => {
             disabled={!imagePreviews.length}
             className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer disabled:opacity-70"
           >
-            {loading ? <LuLoaderCircle size={20} className="mx-auto animate-spin" /> : "Add Banner"}
+            {loading ? (
+              <LuLoaderCircle size={20} className="mx-auto animate-spin" />
+            ) : (
+              "Add Banner"
+            )}
           </button>
         </form>
       </div>
@@ -136,8 +142,6 @@ const HomeBanners = () => {
         `${import.meta.env.VITE_BACKEND_URL}/api/banner/get`
       );
       const data = response.data;
-
-      console.log("banners", data);
       if (data.success) {
         setBanners(data.data);
       }
@@ -153,7 +157,6 @@ const HomeBanners = () => {
       );
       const data = response.data;
 
-      console.log("delete banner", data);
       if (data.success) {
         getBanners();
       }

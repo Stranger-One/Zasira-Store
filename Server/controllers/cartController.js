@@ -12,7 +12,6 @@ const addCartProduct = async (req, res) => {
 
   try {
     const { userId, productId, quantity, size } = req.body;
-    console.log("req.body", req.body);
 
     let cart = await Cart.findOne({ userId });
     if (!cart) {
@@ -195,7 +194,6 @@ const updateProductQuantity = async (req, res) => {
   try {
     const { userId } = req.params;
     const { productId, quantity, size } = req.body;
-    console.log({ userId, productId, quantity, size });
 
     if (!userId || !productId) {
       return res.status(400).json({
@@ -349,8 +347,6 @@ const removeCartProduct = async (req, res) => {
     const { userId } = req.params;
     const { size, productId, quantity } = req.body;
 
-    console.log({ userId, productId, size });
-
     if (!userId || !productId || !size) {
       return res.status(400).json({
         success: false,
@@ -365,7 +361,6 @@ const removeCartProduct = async (req, res) => {
         message: "Cart not found!",
       });
     }
-    console.log(cart.products);
 
     cart.products = cart.products.filter(
       (item) =>

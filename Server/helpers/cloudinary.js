@@ -18,7 +18,7 @@ const storage = new CloudinaryStorage({
     params: async (req, file) => {
         const project_folder = 'Zasira-Store';
 
-        console.log({file});
+        // console.log({file});
         
 
         const fileType = file.mimetype.split('/')[0];

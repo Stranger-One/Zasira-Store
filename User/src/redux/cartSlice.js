@@ -64,7 +64,6 @@ export const removeFromCart = createAsyncThunk(
         size,
         quantity,
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -87,7 +86,6 @@ export const updateQuantity = createAsyncThunk(
         size,
         quantity,
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log("Error updating quantity: ", error);

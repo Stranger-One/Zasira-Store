@@ -14,7 +14,7 @@ const addAddress = async (req, res) => {
       state,
       postcode,
     } = req.body;
-    console.log("address", req.body);
+    // console.log("address", req.body);
 
     if (
       !user ||

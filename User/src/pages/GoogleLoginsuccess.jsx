@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { setToken, validateToken } from "../redux/authSlice";
+import toast from "react-hot-toast";
 
 const GoogleLoginsuccess = () => {
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ const GoogleLoginsuccess = () => {
         }
       );
       const data = res.data;
-      console.log(data);
       dispatch(validateToken(data));
         navigate("/");
     } catch (error) {
@@ -33,12 +33,11 @@ const GoogleLoginsuccess = () => {
 
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get("token");
-    console.log({ token });
     if (token) {
       dispatch(setToken(token))
       localStorage.setItem("token", token);
     } else {
-      console.log("No token found in URL.");
+      toast.error("No token found in URL.");
     }
 
     // fetchUser();

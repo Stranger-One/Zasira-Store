@@ -87,7 +87,6 @@ const ProductForm = () => {
         }
       });
 
-      console.log({ formDataToSend });
 
       // await axios.post("https://your-api.com/products", formDataToSend);
       // alert("Product added successfully!");

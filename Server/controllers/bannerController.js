@@ -3,7 +3,6 @@ import Banner from "../models/BannerModel.js";
 
 const addBannerImage = async (req, res) => {
     try {
-        console.log("Uploaded files:", req.files);
         const images = req.files?.map((image) => {
             return {
                 image: image.path

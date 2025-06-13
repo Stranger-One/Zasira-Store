@@ -12,7 +12,6 @@ const razorpayInstance = new Razorpay({
 
 router.post("/order", (req, res) => {
   const { amount } = req.body;
-  console.log("Received body:", req.body);
 
   if (!amount || isNaN(amount)) {
     return res.status(400).json({ message: "Invalid amount" });
@@ -32,7 +31,6 @@ router.post("/order", (req, res) => {
           .status(500)
           .json({ message: "Something Went Wrong!", error });
       }
-      console.log("Order created:", order);
       res.status(200).json({ data: order });
     });
   } catch (error) {
