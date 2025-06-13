@@ -100,11 +100,12 @@ const getAddress = async (req, res) => {
     }
 
     const address = await Address.findOne({ user: userId });
-    if(!address){
-      return res.status(404).json({
-        success: false,
+    if (!address) {
+      return res.status(200).json({
+        success: true,
         message: "Address not found",
-        });
+        address: null,
+      });
     }
 
     res.status(200).json({

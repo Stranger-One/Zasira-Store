@@ -1,14 +1,14 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import Header from "./components/Header";
 import { Footer, ServiceSection, SubscribeSection } from "./components";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { addToCart, getCart } from "./redux/cartSlice";
+import { getCart } from "./redux/cartSlice";
 import { logout, validateToken } from "./redux/authSlice";
 import { useRef } from "react";
 import { fetchAddress } from "./redux/addressSlice";
+import Header from "./components/Header";
 
 function App() {
   const dispatch = useDispatch();

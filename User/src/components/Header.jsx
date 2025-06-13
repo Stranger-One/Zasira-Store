@@ -145,7 +145,7 @@ const Header = () => {
             >
               <FaShoppingCart className="text-gray-600 text-lg" />
               <span className="absolute top-0 left-0 bg-green-500 text-white text-xs px-1 rounded-full">
-                {cart.length}
+                {cart?.length}
               </span>
               <span className="text-sm ml-1">Cart</span>
             </Button>

@@ -1,11 +1,10 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
-import { AuthLayout, HomeLayout, PageNotFound, RouteProtector } from "./others";
+import { AuthLayout, PageNotFound, RouteProtector } from "./others";
 import {
   Cart,
   Checkout,

@@ -33,7 +33,7 @@ const SignIn = () => {
 
   const handleGoogleLogin = () => {
     // console.log("Google Login clicked");
-    window.open("http://localhost:5000/auth/google", "_self");
+    window.open(`${import.meta.env.VITE_SERVER_BASE_URL}/auth/google`, "_self");
   };
 
   return (

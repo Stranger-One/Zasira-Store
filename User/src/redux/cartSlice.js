@@ -125,7 +125,7 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(getCart.fulfilled, (state, action) => {
-        state.cart = action.payload.cart.products;
+        state.cart = action.payload?.cart?.products || [];
         state.loading = false;
       })
       .addCase(getCart.rejected, (state) => {
@@ -136,7 +136,7 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.cart = action.payload.cart.products;
+        state.cart = action.payload?.cart?.products || [];
         state.loading = false;
         toast.success(action.payload.message);
       })
@@ -149,7 +149,7 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.cart = action.payload.cart.products;
+        state.cart = action.payload?.cart?.products || [];
         state.loading = false;
       })
       .addCase(removeFromCart.rejected, (state) => {
@@ -160,7 +160,7 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateQuantity.fulfilled, (state, action) => {
-        state.cart = action.payload.cart.products;
+        state.cart = action.payload?.cart?.products || [];
         state.loading = false;
       })
       .addCase(updateQuantity.rejected, (state) => {
@@ -171,7 +171,7 @@ const cartSlice = createSlice({
         state.loading = true;
       })
       .addCase(clearCart.fulfilled, (state, action) => {
-        state.cart = action.payload.cart.products;
+        state.cart = action.payload?.cart?.products || [];
         state.loading = false;
       })
       .addCase(clearCart.rejected, (state) => {

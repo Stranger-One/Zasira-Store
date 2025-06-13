@@ -6,7 +6,6 @@ const AuthLayout = () => {
   return (
     <div>
       <Outlet />
-
       <Toaster />
     </div>
   );

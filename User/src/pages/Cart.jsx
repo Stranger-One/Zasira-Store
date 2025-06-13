@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart, updateQuantity } from "../redux/cartSlice.js";
 import {
   Table,
   TableBody,
@@ -8,52 +12,12 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteCart, updateCart } from "../services/cartServices.js";
-import { removeFromCart, setItem, updateQuantity } from "../redux/cartSlice.js";
 import toast from "react-hot-toast";
 
 const Cart = () => {
-  const [openCheckout, setOpenCheckout] = useState(false);
-  const userData = useSelector((state) => state.auth.userData);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  console.log(cart);
-
-  const changeQuantity = async (id, quantity, value) => {
-    // console.log({ id, quantity, value });
-
-    const response = await updateCart({
-      userId: userData?._id,
-      productId: id,
-      quantity: quantity + value,
-    });
-
-    if (response.success) {
-      // console.log(response.data);
-      dispatch(setItem(response.data[0].products));
-    }
-  };
-
-  const handleClose = () => {
-    setOpenCheckout(false);
-  };
-  const handleOpen = () => {
-    setOpenCheckout(true);
-  };
-
-  const deleteProductFromCart = async (productId) => {
-    // console.log({ productId });
-    const response = await deleteCart({ userId: userData?._id, productId });
-    if (response.success) {
-      // console.log("delete response", response);
-      dispatch(setItem(response.data[0].products));
-    }
-  };
 
   const totalPrice = cart?.reduce((acc, item) => {
     return acc + Number(item.details?.price) * item.quantity;
@@ -82,7 +46,7 @@ const Cart = () => {
           Your Cart
         </h1>
         <div className="px-2">
-          {cart.length ? (
+          {cart?.length ? (
             <TableContainer>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead sx={{ bgcolor: "#f7f7f7" }}>
@@ -237,7 +201,7 @@ const Cart = () => {
             <div className="flex justify-between mb-2">
               <span className="text-gray-500">Subtotal</span>
               <span className="text-green-600 font-semibold">
-                ₹{totalPrice.toFixed(2)}
+                ₹{totalPrice?.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between mb-2">
@@ -252,7 +216,7 @@ const Cart = () => {
             <div className="flex justify-between mb-4">
               <span className="text-gray-500 font-semibold">Total</span>
               <span className="text-green-600 font-semibold">
-                ₹{totalPrice.toFixed(2)}
+                ₹{totalPrice?.toFixed(2)}
               </span>
             </div>
             <div className="flex w-full items-center justify-end">

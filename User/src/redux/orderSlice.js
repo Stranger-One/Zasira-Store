@@ -86,23 +86,16 @@ const orderSlice = createSlice({
       .addCase(getOrders.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
         state.loading = false;
-        toast.success(action.payload.message);
       })
       .addCase(getOrders.rejected, (state, action) => {
         state.loading = false;
-        toast.error(action.payload.message);
-      })
-      .addCase(calcelOrder.pending, (state, action) => {
-        state.loading = true;
       })
       .addCase(calcelOrder.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
-        state.loading = false;
-        toast.success(action.payload.message);
+        toast.success("Order canceled successfully");
       })
       .addCase(calcelOrder.rejected, (state, action) => {
-        state.loading = false;
-        toast.error(action.payload.message);
+        toast.error("Failed to cancel order");
       })
   },
 });

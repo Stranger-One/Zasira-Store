@@ -1,16 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { makeOrder } from "../services/orderServices";
 import { AddressForm } from "../components";
 import { clearCart } from "../redux/cartSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { makeOrder } from "../redux/orderSlice";
 
 const Checkout = () => {
   const cart = useSelector((state) => state.cart.cart);
   const userData = useSelector((state) => state.auth.userData);
   const address = useSelector((state) => state.address.address);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const validate = () => {
@@ -57,10 +57,8 @@ const Checkout = () => {
       } catch (error) {
         console.log(error);
       }
-      
     } else {
-      toast.error("Billing Details Required!")
-      
+      toast.error("Billing Details Required!");
     }
   };
 
@@ -108,28 +106,26 @@ const Checkout = () => {
   };
   // handle order Function
   const handleOrder = async ({ order_id, payment_id, signature }) => {
-    const order = await makeOrder({
-      user: userData?.id,
-      orders: cart.map((item) => ({
-        product: item.productId,
-        quantity: item.quantity,
-        size: item.size,
-      })),
-      address,
-      payment: {
-        orderId: order_id,
-        paymentId: payment_id,
-        signature: signature,
-      },
-      totalPrice: totalPrice.toFixed(2),
-    });
+    dispatch(
+      makeOrder({
+        user: userData?.id,
+        orders: cart.map((item) => ({
+          product: item.productId,
+          quantity: item.quantity,
+          size: item.size,
+        })),
+        address,
+        payment: {
+          orderId: order_id,
+          paymentId: payment_id,
+          signature: signature,
+        },
+        totalPrice: totalPrice.toFixed(2),
+      })
+    );
 
-    if (order.success) {
-      toast.success("Order placed successfully");
-      dispatch(clearCart());
-      navigate("/orders")
-      // console.log({ order });
-    }
+    dispatch(clearCart());
+    navigate("/orders");
   };
 
   return (
@@ -141,43 +137,52 @@ const Checkout = () => {
           <div className="w-full">
             <h2 className="text-lg font-semibold mb-4">YOUR ORDER</h2>
 
-            {cart.length ? <table className="w-full border-gray-300  overflow-hidden">
-              <thead className="bg-gray-100 text-gray-700 uppercase text-sm">
-                <tr>
-                  <th className="px-4 py-3 border-b text-left">Product</th>
-                  <th className="px-4 py-3 border-b text-center">Quantity</th>
-                  <th className="px-4 py-3 border-b text-right">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cart.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="border-b even:bg-gray-100 hover:bg-gray-200 transition-all"
-                  >
-                    <td className="px-4 py-3 text-gray-900">
-                      {item.details.title}
-                    </td>
-                    <td className="px-4 py-3 text-center text-gray-700">
-                      {item.quantity}
-                    </td>
-                    <td className="px-4 py-3 text-right font-semibold text-gray-900">
-                      ₹
-                      {(
-                        (Number(item.details?.price) -
-                          (Number(item.details?.price) *
-                            Number(item.details?.discount)) /
-                            100) *
-                        item.quantity
-                      ).toFixed(2)}
-                    </td>
+            {cart.length ? (
+              <table className="w-full border-gray-300  overflow-hidden">
+                <thead className="bg-gray-100 text-gray-700 uppercase text-sm">
+                  <tr>
+                    <th className="px-4 py-3 border-b text-left">Product</th>
+                    <th className="px-4 py-3 border-b text-center">Quantity</th>
+                    <th className="px-4 py-3 border-b text-right">Price</th>
                   </tr>
-                ))}
-              </tbody>
-            </table> : (
+                </thead>
+                <tbody>
+                  {cart.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="border-b even:bg-gray-100 hover:bg-gray-200 transition-all"
+                    >
+                      <td className="px-4 py-3 text-gray-900">
+                        {item.details.title}
+                      </td>
+                      <td className="px-4 py-3 text-center text-gray-700">
+                        {item.quantity}
+                      </td>
+                      <td className="px-4 py-3 text-right font-semibold text-gray-900">
+                        ₹
+                        {(
+                          (Number(item.details?.price) -
+                            (Number(item.details?.price) *
+                              Number(item.details?.discount)) /
+                              100) *
+                          item.quantity
+                        ).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
               <div className="w-full h-full flex flex-col items-center justify-center">
-                <p className="text-lg font-bold text-gray-700/60">Your cart is empty</p>
-                <Link to={"/products"} className="opacity-75 text-gray-600 hover:opacity-100 hover:text-green-600 hover:font-semibold" >Go to Shopping</Link>
+                <p className="text-lg font-bold text-gray-700/60">
+                  Your cart is empty
+                </p>
+                <Link
+                  to={"/products"}
+                  className="opacity-75 text-gray-600 hover:opacity-100 hover:text-green-600 hover:font-semibold"
+                >
+                  Go to Shopping
+                </Link>
               </div>
             )}
           </div>

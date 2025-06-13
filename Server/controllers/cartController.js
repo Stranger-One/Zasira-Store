@@ -122,7 +122,7 @@ const fetchCartProducts = async (req, res) => {
       });
     }
 
-    const cart = await Cart.aggregate([
+    let cart = await Cart.aggregate([
       {
         $match: {
           userId: userId,
@@ -176,7 +176,7 @@ const fetchCartProducts = async (req, res) => {
         message: "Cart not found with provided userId!",
       });
     }
-
+    
     res.status(200).json({
       success: true,
       message: "Cart products fetched successfully",

@@ -75,7 +75,7 @@ app.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const { token } = req.user; // token was passed from passport.use
-    res.redirect(`http://localhost:5173/auth/login/success?token=${token}`);
+    res.redirect(`${process.env.USER_BASE_URL}/auth/login/success?token=${token}`);
   }
 );
 
