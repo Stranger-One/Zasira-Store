@@ -36,10 +36,12 @@ export const createReview = async (req, res) => {
       });
     }
 
+    const reviews = await Review.find({product: productId}).sort({createdAt: -1})
+
     res.status(201).json({
       success: true,
       message: "Review created successfully",
-      review,
+      reviews,
     });
   } catch (error) {
     console.error(error);

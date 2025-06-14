@@ -1,29 +1,38 @@
 import { Rating } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { createReview } from "../services/reviewServices";
+import { useSelector } from "react-redux";
+import { LuLoaderCircle } from "react-icons/lu";
 
-const ReviewForm = ({ userId, productId, getThisProduct }) => {
+const ReviewForm = ({ productId, getThisProduct }) => {
   const [username, setUsername] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [loading, setLoading] = useState(false)
+  const userData = useSelector((state) => state.auth.userData);
+
 
   const submit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     // console.log({ comment, rating, userId, productId });
 
     const response = await createReview({
       comment,
       rating,
-      userId,
+      userId: userData?.id,
       productId,
       username,
     });
+
     if (response.success) {
-      // console.log(response);
+      // console.log("create response", response);
       setComment("");
       setRating(0);
-      getThisProduct();
+      getThisProduct()
+      // setProduct(product => ({...product, reviews:  response.reviews}))
     }
+    setLoading(false)
   };
 
   return (
@@ -32,6 +41,7 @@ const ReviewForm = ({ userId, productId, getThisProduct }) => {
       <form onSubmit={submit}>
         <div className="mb-4 space-y-4">
           <input
+          required
             type="text"
             name="username"
             value={username}
@@ -40,6 +50,7 @@ const ReviewForm = ({ userId, productId, getThisProduct }) => {
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 "
           />
           <textarea
+          required
             id="review"
             name="review"
             value={comment}
@@ -49,6 +60,7 @@ const ReviewForm = ({ userId, productId, getThisProduct }) => {
             rows="4"
           ></textarea>
           <Rating
+          required
             name="simple-controlled"
             onChange={(event, newValue) => {
               setRating(newValue);
@@ -59,9 +71,9 @@ const ReviewForm = ({ userId, productId, getThisProduct }) => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 cursor-pointer"
         >
-          Submit Review
+          {loading ? <LuLoaderCircle size={28} className="mx-auto animate-spin" /> : "Submit Review"}
         </button>
       </form>
     </div>

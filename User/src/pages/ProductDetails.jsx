@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Products from "../assets/Products";
 import {
@@ -42,10 +42,10 @@ import { LuLoaderCircle } from "react-icons/lu";
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [rating, setRating] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [relatedProducts, setrelatedProducts] = useState(null);
-  const userData = useSelector((state) => state.auth.userData);
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.cart);
   const [pageLoading, setPageLoading] = useState(false);
@@ -62,6 +62,17 @@ const ProductDetails = () => {
     // console.log({ product });
     setProduct(product?.data);
 
+    const ratingSum = product.data.reviews.reduce(
+      (acc, review) => acc + review.rating,
+      0
+    );
+    const avgRating = product.data.reviews.length
+      ? (ratingSum / product.data.reviews.length).toFixed(1)
+      : 0;
+    // console.log({ ratingSum, avgRating });
+
+    setRating(avgRating);
+
     const relProducts = await getProducts({
       category: product?.data?.category,
       limit: 10,
@@ -70,6 +81,7 @@ const ProductDetails = () => {
 
     setPageLoading(false);
   };
+
 
   const addToCartProduct = async () => {
     if (product?.size?.length > 0 && !selectedSize) {
@@ -145,10 +157,10 @@ const ProductDetails = () => {
 
                 {/* Rating */}
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl">{product?.rating}</h3>
+                  <h3 className="text-xl">{rating}</h3>
                   <Rating
                     name="read-only"
-                    value={product?.rating}
+                    value={rating}
                     precision={0.1}
                     readOnly
                   />
@@ -234,10 +246,7 @@ const ProductDetails = () => {
                   >
                     Add to Cart{" "}
                     {loading ? (
-                      <LuLoaderCircle
-                        size={20}
-                        className=" animate-spin"
-                      />
+                      <LuLoaderCircle size={20} className=" animate-spin" />
                     ) : (
                       <RiShoppingCartLine size={20} />
                     )}
@@ -305,7 +314,7 @@ const ProductDetails = () => {
                   Product Reviews
                 </h2>
                 <div className="w-full overflow-y-auto max-h-[500px]">
-                  <div className="space-y-4 h-full">
+                  <div className="space-y-4 h-full pr-2">
                     {product?.reviews ? (
                       product?.reviews?.map((review, index) => (
                         <Card
@@ -372,11 +381,7 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-                <ReviewForm
-                  userId={userData?._id}
-                  productId={id}
-                  getThisProduct={getThisProduct}
-                />
+                <ReviewForm productId={id} getThisProduct={getThisProduct} />
               </div>
 
               {/* Related Products */}
