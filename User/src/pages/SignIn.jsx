@@ -74,11 +74,13 @@ const SignIn = () => {
             </button>
           </div>
 
-          <div className="text-right mb-4">
+          {/*<div className="text-right mb-4">
             <a href="#" className="text-blue-500 hover:underline">
               Forgot Password?
             </a>
-          </div>
+          </div> */}
+
+
 
           <button className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition  cursor-pointer">
             {loading ? (

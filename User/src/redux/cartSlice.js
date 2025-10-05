@@ -86,7 +86,7 @@ export const updateQuantity = createAsyncThunk(
     );
 
     try {
-      console.log("calling api...");
+      // console.log("calling api...");
       const response = await api.put(`/update/${userData.id}`, {
         productId,
         size,
@@ -124,7 +124,7 @@ const cartSlice = createSlice({
   reducers: {
     updateCartQuantity: (state, action) => {
       const { productId, size, quantity } = action.payload;
-      console.log("updating in local...");
+      // console.log("updating in local...");
 
       const index = state.cart.findIndex(
         (item) => item.productId === productId && item.size === size

@@ -60,7 +60,7 @@ const Cart = () => {
   useEffect(() => {
     if (updateDetails?.productId && updateDetails?.size) {
       const timer = setTimeout(() => {
-        console.log("making api call simulation...", updateDetails);
+        // console.log("making api call simulation...", updateDetails);
         
         dispatch(
           updateQuantity({
