@@ -1,9 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart, updateQuantity } from "../redux/cartSlice.js";
+import {
+  removeFromCart,
+  updateCartQuantity,
+  updateQuantity,
+} from "../redux/cartSlice.js";
 import {
   Table,
   TableBody,
@@ -38,6 +42,41 @@ const Cart = () => {
       behavior: "smooth",
     });
   }, []);
+
+  const [updateDetails, setUpdateDetails] = useState({
+    productId: "",
+    size: "",
+  });
+
+  const handleCartQuantityUpdate = (productId, size, quantity) => {
+    dispatch(updateCartQuantity({ productId, size, quantity }));
+    setUpdateDetails({
+      productId,
+      size,
+    });
+    
+  };
+
+  useEffect(() => {
+    if (updateDetails?.productId && updateDetails?.size) {
+      const timer = setTimeout(() => {
+        console.log("making api call simulation...", updateDetails);
+        
+        dispatch(
+          updateQuantity({
+            productId: updateDetails?.productId,
+            size: updateDetails?.size,
+          })
+        );
+        setUpdateDetails({
+          productId: "",
+          size: "",
+        });
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [handleCartQuantityUpdate]);
 
   return (
     <div className="w-full px-4 md:px-10 py-5  gap-4">
@@ -127,12 +166,10 @@ const Cart = () => {
                         <div className="flex justify-center items-center">
                           <button
                             onClick={() =>
-                              dispatch(
-                                updateQuantity({
-                                  productId: product?.productId,
-                                  size: product?.size,
-                                  quantity: -1,
-                                })
+                              handleCartQuantityUpdate(
+                                product.productId,
+                                product.size,
+                                -1
                               )
                             }
                             className="h-6 w-6 md:h-8 md:w-8 rounded-md flex items-center justify-center bg-gray-200 hover:bg-gray-300 cursor-pointer"
@@ -144,12 +181,10 @@ const Cart = () => {
                           </span>
                           <button
                             onClick={() =>
-                              dispatch(
-                                updateQuantity({
-                                  productId: product?.productId,
-                                  size: product?.size,
-                                  quantity: 1,
-                                })
+                              handleCartQuantityUpdate(
+                                product.productId,
+                                product.size,
+                                +1
                               )
                             }
                             className="h-6 w-6 md:h-8 md:w-8 rounded-md flex items-center justify-center bg-gray-200 hover:bg-gray-300 cursor-pointer"

@@ -194,6 +194,7 @@ const updateProductQuantity = async (req, res) => {
   try {
     const { userId } = req.params;
     const { productId, quantity, size } = req.body;
+    console.log(req.body)
 
     if (!userId || !productId) {
       return res.status(400).json({
@@ -222,6 +223,10 @@ const updateProductQuantity = async (req, res) => {
       });
     }
 
+    const updateStockBy =
+      cart.products[findCurrentProductIndex].quantity - quantity;
+    
+
     if (
       cart.products[findCurrentProductIndex].quantity == 1 &&
       quantity == -1
@@ -235,11 +240,13 @@ const updateProductQuantity = async (req, res) => {
           )
       );
     } else {
-      cart.products[findCurrentProductIndex].quantity += quantity;
+      cart.products[findCurrentProductIndex].quantity = quantity;
     }
 
+    
     let product = await Product.findById(productId)
-    product.stock -= quantity
+    product.stock += updateStockBy
+
 
     await cart.save();
     await product.save();

@@ -79,12 +79,18 @@ export const updateQuantity = createAsyncThunk(
   "cart/updateQuantity",
   async ({ productId, size, quantity }, { getState, rejectWithValue }) => {
     const { userData } = getState().auth;
+    const { cart } = getState().cart;
+
+    const updatingPriduct = cart.find(
+      (p) => p.productId === productId && p.size === size
+    );
 
     try {
+      console.log("calling api...");
       const response = await api.put(`/update/${userData.id}`, {
         productId,
         size,
-        quantity,
+        quantity: updatingPriduct.quantity,
       });
       return response.data;
     } catch (error) {
@@ -115,7 +121,26 @@ const cartSlice = createSlice({
     cart: [],
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    updateCartQuantity: (state, action) => {
+      const { productId, size, quantity } = action.payload;
+      console.log("updating in local...");
+
+      const index = state.cart.findIndex(
+        (item) => item.productId === productId && item.size === size
+      );
+
+      if (state.cart[index].details.stock === 0 && quantity === 1) {
+        toast.error("Product out of stock");
+        return;
+      }
+      if (state.cart[index].quantity === 1 && quantity === -1) return;
+      if (index !== -1) {
+        state.cart[index].quantity += quantity;
+        state.cart[index].details.stock -= quantity;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Get cart cases
@@ -178,5 +203,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { setItem, addToCartLocal } = cartSlice.actions;
+export const { setItem, addToCartLocal, updateCartQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;
